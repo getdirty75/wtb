@@ -59,16 +59,15 @@ export interface MapConfig {
 const Map = withStyles(mapStyles)(React.memo((props: WithStyles<typeof mapStyles> & MapConfig) => {
 
   const { classes, initialValues, userDidSelectArea } = props;
-  console.log("== HOME SECTION ===");
-  // console.log(user);
+
   const options: Optional<Options> = {
-    ambientLightColor: '#fff',
-    cameraRotateSpeed: 0.5,
+    ambientLightColor: '#222222',
+    cameraRotateSpeed: 0.9,
     focusAnimationDuration: 2000,
     focusEasingFunction: ['Linear', 'None'],
     pointLightColor: '#7bdbdc',
-    pointLightIntensity: 1.5,
-    globeGlowColor: '#fff',
+    pointLightIntensity: 2.5,
+    globeGlowColor: '#fcdcbf',
     markerTooltipRenderer: (marker: Marker) => `${marker.city} (${marker.value})`,
   };
 
@@ -81,8 +80,15 @@ const Map = withStyles(mapStyles)(React.memo((props: WithStyles<typeof mapStyles
         height='100vh'
         // globeBackgroundTexture='https://2050.earth/assets/earth/earth_1.png'
         globeCloudsTexture={null}
-        globeTexture='https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe_dark.jpg'
-        initialCoordinates={[1.3521, 103.8198]}
+        // globeTexture='https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe_dark.jpg'
+        // globeTexture='https://thumbs.dreamstime.com/z/dotted-world-map-15677472.jpg'
+        // globeTexture='https://thumbs.dreamstime.com/z/d-hand-drawn-illustration-world-map-color-gradiented-watercolor-image-isolated-earth-planet-colorful-continents-white-108829238.jpg'
+        // globeTexture='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/World_map_%28blue_dots%29.svg/2100px-World_map_%28blue_dots%29.svg.png'
+        // globeTexture='https://s3.envato.com/files/220728291/worldmap.png'
+         globeTexture='https://img.glyphs.co/img?src=aHR0cHM6Ly9zMy5tZWRpYWxvb3QuY29tL3Jlc291cmNlcy9WZWN0b3ItV29ybGQtTWFwLS1VUy1TdGF0ZXMtUHJldmlldy0xLmpwZw&q=90&enlarge=true&h=1036&w=1600'
+        // globeTexture='https://images.template.net/wp-content/uploads/2015/11/17145825/Vector-Illustration-of-High-Detailded-World-Map.gif'
+        // globeTexture='https://wallpapercave.com/wp/iz8ewgv.jpg'
+        initialCoordinates={[-1.28333, 36.81667]}
         markers={initialValues.markers}
         options={options}
         width="100%"
