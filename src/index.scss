@@ -150,6 +150,8 @@ body {
 }
 
 .content {
+  background-color: #222222;
+  border-radius: 10%;
   max-width: 30vw;
   position: absolute;
   right: 10%;
@@ -183,8 +185,9 @@ body {
   @extend .fixed;
   bottom: $spacing;
   left: auto;
-  right: $spacing;
+  right: auto;
   top: auto;
+  width: 100vw;
 }
 
 .header {
