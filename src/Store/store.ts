@@ -15,7 +15,7 @@ declare global {
 };
 
 const reducer = combineReducers({
-  user: userReducer,//user key ma store gareko
+  user: userReducer, //user key ma store gareko
   UI: uiReducer,
 });
 

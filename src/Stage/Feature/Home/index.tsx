@@ -1,128 +1,56 @@
 
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
-import { Box, createStyles, Grid, WithStyles, withStyles } from '@material-ui/core';
+import { Box, createStyles, Grid, Typography, WithStyles, withStyles } from '@material-ui/core';
 import GLOBE from './map';
 import { Marker } from 'react-globe';
+import { mockedCountries } from '../../Data/Countries';
+import { mockedUsers } from '../../Data/Users';
+import { COUNTRY } from '../../Data/model';
+import ReactAudioPlayer from 'react-audio-player';
+import { Link } from 'react-router-dom';
 
-//#region CONSTANTS
-export enum MarkerType {
-  SOME_VALUE = 'SOME_VALUE',
-  OTHER_VALUE = 'OTHER_VALUE',
-}
 
-// const DEFAULT_MASTER_SCHEMA: Schema = {};
-// const DEFAULT_MASTER_SETUP = {
-//   loading: false,
-//   schema: DEFAULT_MASTER_SCHEMA,
-//   count: 0,
-// }
-//#endregion
-
-//#region QUERIES
-// const query = ({obj: any}): Partial<T> => { return null}
-//#endregion
-
-//#region STYLE
 const styles = () => createStyles({
-  home__title: { textTransform: 'capitalize' }
+  home__title: { textTransform: 'capitalize' },
+  map__fixed: {
+    bottom: 0,
+    left: 0,
+    pointerEvents: 'none',
+    position: 'fixed',
+    right: 0,
+    top: 0,
+  },
+  map__audio: {
+    color: '#fff',
+  },
 });
-//#endregion
 
-//#region CONNEXION
-const mapStateToProps = (state: any) => ({
-  user: state.user,
-});
-//this map actions to our props in this functional component
+const mapStateToProps = (state: any) => ({ user: state.user });
 const mapActionsToProps = {};
-//#endregion
 
 type HomeProps = WithStyles<typeof styles>;
-//#region COMPONENT
+
 const feature = withStyles(styles)(React.memo((props: HomeProps) => {
-
   const { classes } = props;
-  console.log(props)
+  const [selectedItem, setSelectedItem] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState({} as COUNTRY);
 
-  //#region CYCLE
-  useEffect(
-    () => {
-      console.log('component mounted')
-      //  dispatch();
-    },
-    [],
-  );
-  //#endregion
-
-  //#region EVENT
+  useEffect(() => { console.log('component mounted')},[]);
   const userDidSelectArea = useCallback(
     (marker: Marker) => {
-      console.log('userDidSelectArea : ')
-      console.log(marker)
+      const currentCountry = mockedCountries.filter((country) => country.marker.id === marker.id)[0];
+      setSelectedCountry(currentCountry);
+      setSelectedItem(true);
     },
     [],
   );
-  //#endregion
-
-  //#region MODEL
+  const userDidUnselectArea = useCallback(() => { setSelectedItem(false) }, []);
   const mapInitialMarkers: Marker[] = useMemo(
-    () => {
-      return [
-        {
-          id: 'marker1',
-          city: 'Singapore',
-          color: 'red',
-          coordinates: [1.3521, 103.8198],
-          value: 50,
-          tracks: ['007', '002'],
-        },
-        {
-          id: 'marker2',
-          city: 'New York',
-          color: 'blue',
-          coordinates: [40.73061, -73.935242],
-          value: 25,
-          tracks: ['003', '001'],
-        },
-        {
-          id: 'marker3',
-          city: 'San Francisco',
-          color: 'orange',
-          coordinates: [37.773972, -122.431297],
-          value: 35,
-          tracks: ['005', '007', '009'],
-        },
-        {
-          id: 'marker4',
-          city: 'Beijing',
-          color: 'gold',
-          coordinates: [39.9042, 116.4074],
-          value: 135,
-          tracks: ['004', '002'],
-        },
-        {
-          id: 'marker5',
-          city: 'London',
-          color: 'green',
-          coordinates: [51.5074, 0.1278],
-          value: 80,
-          tracks: ['006', '008'],
-        },
-        {
-          id: 'marker6',
-          city: 'Los Angeles',
-          color: 'gold',
-          coordinates: [29.7604, -95.3698],
-          value: 54,
-          tracks: ['001', '003'],
-        },
-      ];
-    },
+    () => mockedCountries.map(({ marker }) => marker),
     [],
   );
-  //#endregion
 
-  //#region RENDERING
   const configuration = useMemo(
     () => ({
       name: 'map',
@@ -133,8 +61,7 @@ const feature = withStyles(styles)(React.memo((props: HomeProps) => {
         }
       },
       onSubmit: async (values: any) => {
-        console.log(values);
-        // dispatch();
+        console.log('onSubmit' + values);
       },
     }),
     [mapInitialMarkers],
@@ -151,8 +78,46 @@ const feature = withStyles(styles)(React.memo((props: HomeProps) => {
         <Grid item md={12}>
           <GLOBE
             userDidSelectArea={userDidSelectArea}
+            userDidUnselectArea={userDidUnselectArea}
             {...configuration}
           />
+          <Grid className={classes.map__fixed}>
+            <Grid className="overlay">
+              <div className="content">
+                {selectedItem &&
+                  selectedCountry.beatmakers.map((beatmakerId, index) => {
+                    return (
+                      <Link key={index} to={`/profile/${beatmakerId}`}>
+                        <Typography>
+                          {mockedUsers.filter(({id}) => id === beatmakerId)[0].info.username}
+                        </Typography>
+                      </Link>
+                    )
+                  })
+                }
+              </div>
+              <Grid container className="footer">
+                <Grid item md={5} xs={12}>
+                Image titre ...
+                </Grid>
+                <Grid item md={4} xs={12}>
+                  <ReactAudioPlayer
+                    autoPlay
+                    className={classes.map__audio}
+                    controls
+                    src="my_audio_file.ogg"
+                  />
+                </Grid>
+                <Grid item md={3} xs={12}>
+                  Tools
+                </Grid>
+
+                {/* <audio className={classes.map__audio} controls>
+                  <source src="horse.mp3" type="audio/mpeg" />
+                </audio> */}
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Box>
