@@ -7,7 +7,6 @@ import { Marker } from 'react-globe';
 import { mockedCountries } from '../../Data/Countries';
 import { mockedUsers } from '../../Data/Users';
 import { COUNTRY } from '../../Data/model';
-import ReactAudioPlayer from 'react-audio-player';
 import { Link } from 'react-router-dom';
 
 
@@ -101,20 +100,13 @@ const feature = withStyles(styles)(React.memo((props: HomeProps) => {
                 Image titre ...
                 </Grid>
                 <Grid item md={4} xs={12}>
-                  <ReactAudioPlayer
-                    autoPlay
-                    className={classes.map__audio}
-                    controls
-                    src="my_audio_file.ogg"
-                  />
+                  <audio className={classes.map__audio} controls>
+                    <source src="horse.mp3" type="audio/mpeg" />
+                  </audio>
                 </Grid>
                 <Grid item md={3} xs={12}>
                   Tools
                 </Grid>
-
-                {/* <audio className={classes.map__audio} controls>
-                  <source src="horse.mp3" type="audio/mpeg" />
-                </audio> */}
               </Grid>
             </Grid>
           </Grid>
