@@ -3,8 +3,9 @@ import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
 import { createStyles, Grid, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { mockedUsers } from '../../../Data/Users';
-import { USER } from '../../../Data/model';
+import { BEAT, USER } from '../../../Data/model';
 import { RouteComponentProps, useParams } from 'react-router-dom';
+import { mockedBeats } from '../../../Data/Beats';
 
 //#region STYLE
 const styles = () => createStyles({
@@ -33,6 +34,13 @@ const feature = withStyles(styles)(React.memo((props: ProfileProps & RouteCompon
     },
     [beatmakerId],
   );
+
+  const allBeats = useMemo(
+    () => {
+      return mockedBeats.filter( (beat: BEAT) => beat.basics.userId === parseInt(beatmakerId, 10))
+    },
+    [beatmakerId],
+  );
   //#endregion
 
   return (
@@ -46,11 +54,20 @@ const feature = withStyles(styles)(React.memo((props: ProfileProps & RouteCompon
       >
         <Typography className={classes.profile__title} variant='h4'>{currentBeatmaker.info.username}</Typography>
         <Typography className={classes.profile__title} variant='body1'>(aka {currentBeatmaker.info.firstName} - {currentBeatmaker.info.lastName})</Typography>
-
         <Typography variant='body1'>living {currentBeatmaker.info.address}</Typography>
-        {/* {
-          currentBeatmaker.beats.map((beat) => <Typography variant='h6'>{beat.basics.name}</Typography>)
-        } */}
+        {allBeats.map((beat, index) => {
+            return (
+              <Grid container key={index}>
+                 <audio controls>
+                  <source src={beat.url} type="audio/mpeg" />
+                </audio>
+                <Typography variant='h6'>{beat.basics.name}</Typography>
+                <Typography variant='body1'>{beat.basics.duration}</Typography>
+                <Typography variant='h6'>{beat.basics.price} €</Typography>
+                <Typography variant='h6'>{beat.basics.exclusive ? 'Exclusive' : ''}</Typography>
+              </Grid>
+            )
+          })}
       </Grid>
   );
 

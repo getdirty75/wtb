@@ -32,7 +32,6 @@ export interface USER {
       url: string;
     }
   };
-  beats: BEAT[];
   followers: USER[];
   plays: number;
   reposts?: any;
@@ -40,25 +39,26 @@ export interface USER {
 
 export interface BEAT {
   id: number;
-  createdAt: Date;
+  createdAt?: Date;
+  url: string;
   basics: {
     duration: number;
     name: string;
-    picture: {
+    picture?: {
       file: File;
       url: string;
     };
-    user: USER;
+    userId: number;
     price: number;
     exclusive: boolean;
   };
-  stats: {
+  stats?: {
     played: number;
     sold: number;
     favorited: number;
     reposted: number;
   };
-  style: {
+  style?: {
     genre: BeatGenre;
     mood: BeatMood;
     relatedArtist: string;
